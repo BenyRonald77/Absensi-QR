@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TRAINER
+  KARYAWAN
+}
+
+enum StatusSesi {
+  DRAFT
+  DIBUKA
+  DITUTUP
+}
+
+enum StatusAssignment {
+  DITUGASKAN
+  SELESAI
+  DIBATALKAN
+}
+
+enum StatusAbsensi {
+  HADIR
+  ALPHA
+}
+
+model Departemen {
+  id       String     @id @default(uuid()) @db.Uuid
+  nama     String     @unique @db.VarChar(120)
+  karyawan Karyawan[]
+
+  @@map("departemen")
+}
+
+model Karyawan {
+  id           String       @id @default(uuid()) @db.Uuid
+  nama         String       @db.VarChar(150)
+  email        String       @unique @db.VarChar(255)
+  passwordHash String       @map("password_hash") @db.VarChar(255)
+  departemenId String       @map("departemen_id") @db.Uuid
+  role         Role         @default(KARYAWAN)
+  aktif        Boolean      @default(true)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  departemen   Departemen   @relation(fields: [departemenId], references: [id], onDelete: Restrict)
+  sesiDiampu   Sesi[]       @relation("TrainerSesi")
+  assignments  Assignment[]
+  absensi      Absensi[]
+
+  @@index([departemenId])
+  @@index([role, aktif])
+  @@map("karyawan")
+}
+
+model Training {
+  id        String   @id @default(uuid()) @db.Uuid
+  nama      String   @db.VarChar(180)
+  deskripsi String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  sesi      Sesi[]
+
+  @@index([nama])
+  @@map("training")
+}
+
+model Sesi {
+  id          String       @id @default(uuid()) @db.Uuid
+  trainingId  String       @map("training_id") @db.Uuid
+  trainerId   String       @map("trainer_id") @db.Uuid
+  waktuBuka   DateTime?    @map("waktu_buka") @db.Timestamptz(6)
+  waktuTutup  DateTime?    @map("waktu_tutup") @db.Timestamptz(6)
+  durasiJam   Decimal?     @map("durasi_jam") @db.Decimal(7, 2)
+  status      StatusSesi   @default(DRAFT)
+  training    Training     @relation(fields: [trainingId], references: [id], onDelete: Restrict)
+  trainer     Karyawan     @relation("TrainerSesi", fields: [trainerId], references: [id], onDelete: Restrict)
+  assignments Assignment[]
+  absensi     Absensi[]
+
+  @@index([trainingId])
+  @@index([trainerId])
+  @@index([status])
+  @@map("sesi")
+}
+
+model Assignment {
+  id         String           @id @default(uuid()) @db.Uuid
+  karyawanId String           @map("karyawan_id") @db.Uuid
+  sesiId     String           @map("sesi_id") @db.Uuid
+  status     StatusAssignment @default(DITUGASKAN)
+  karyawan   Karyawan         @relation(fields: [karyawanId], references: [id], onDelete: Restrict)
+  sesi       Sesi             @relation(fields: [sesiId], references: [id], onDelete: Restrict)
+
+  @@unique([karyawanId, sesiId])
+  @@index([sesiId])
+  @@map("assignment")
+}
+
+model Absensi {
+  id         String        @id @default(uuid()) @db.Uuid
+  karyawanId String        @map("karyawan_id") @db.Uuid
+  sesiId     String        @map("sesi_id") @db.Uuid
+  waktuScan  DateTime      @default(now()) @map("waktu_scan") @db.Timestamptz(6)
+  latitude   Decimal?      @db.Decimal(9, 6)
+  longitude  Decimal?      @db.Decimal(9, 6)
+  status     StatusAbsensi @default(HADIR)
+  karyawan   Karyawan      @relation(fields: [karyawanId], references: [id], onDelete: Restrict)
+  sesi       Sesi          @relation(fields: [sesiId], references: [id], onDelete: Restrict)
+
+  @@unique([karyawanId, sesiId])
+  @@index([sesiId])
+  @@index([waktuScan])
+  @@map("absensi")
+}

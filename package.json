@@ -1,0 +1,29 @@
+{
+  "name": "sistem-absensi-training",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "dotenv -e .env -- concurrently -k -n API,WEB \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm run start:dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"backend/src/**/*.ts\" \"backend/test/**/*.ts\" \"backend/prisma/**/*.ts\" \"frontend/src/**/*.{ts,tsx,css}\"",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:generate": "dotenv -e .env -- npm run prisma:generate -w backend",
+    "db:migrate": "dotenv -e .env -- npm run prisma:migrate -w backend",
+    "db:status": "dotenv -e .env -- npm run prisma:status -w backend",
+    "db:validate": "dotenv -e .env -- npm run prisma:validate -w backend",
+    "db:seed": "dotenv -e .env -- npm run prisma:seed -w backend"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "dotenv-cli": "^11.0.0",
+    "prettier": "^3.6.2"
+  }
+}
