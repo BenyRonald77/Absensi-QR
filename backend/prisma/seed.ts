@@ -76,6 +76,12 @@ async function main() {
     });
   }
 
+  await prisma.complianceSetting.upsert({
+    where: { id: 1 },
+    update: {},
+    create: { id: 1, targetHours: 6 },
+  });
+
   console.info(
     `Seed selesai: ${departments.length} departemen dan ${demoAccounts.length} akun demo.`,
   );

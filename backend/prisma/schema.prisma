@@ -130,3 +130,11 @@ model RefreshToken {
   @@index([karyawanId, expiresAt])
   @@map("refresh_token")
 }
+
+model ComplianceSetting {
+  id          Int      @id @default(1)
+  targetHours Decimal  @default(6.00) @map("target_hours") @db.Decimal(7, 2)
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("compliance_setting")
+}

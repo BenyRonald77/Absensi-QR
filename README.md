@@ -30,7 +30,10 @@ Login mengembalikan JWT access token dan menaruh refresh token JWT pada cookie `
 - `POST /api/auth/login`, `POST /api/auth/refresh`, `POST /api/auth/logout`, `GET /api/auth/me`
 - CRUD Admin: `/api/departemen`, `/api/karyawan`, `/api/training`
 - Sesi dasar: `POST /api/sesi` (Admin), `GET /api/sesi` dan `GET /api/sesi/:id` (Admin/Trainer)
+- Compliance dasar: `GET /api/compliance/me?year=2026` (user terautentikasi; default tahun berjalan WIB), `GET` dan `PUT /api/compliance/setting` (Admin)
 - Semua endpoint list menerima `page` dan `limit`; daftar karyawan juga menerima filter `departemenId`.
+
+Perhitungan compliance menjumlahkan `durasi_jam` dari sesi bertanggal `waktu_buka` pada tahun kalender WIB yang dipilih, hanya jika karyawan memiliki Absensi `HADIR`. Target awal 6 jam disimpan di database dan dapat diubah Admin melalui endpoint pengaturan.
 
 ## Perintah utama
 
