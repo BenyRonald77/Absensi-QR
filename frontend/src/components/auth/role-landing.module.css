@@ -1,0 +1,80 @@
+.loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: #66776f;
+  font-size: 14px;
+}
+.page {
+  min-height: 100vh;
+  padding: 26px 7vw;
+  background: #f4f7f5;
+}
+.header {
+  width: min(1000px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+.brand {
+  color: #20332b;
+  font-size: 13px;
+  font-weight: 650;
+}
+.header button {
+  padding: 8px 12px;
+  border: 1px solid #dfe8e3;
+  border-radius: 8px;
+  background: #fff;
+  color: #53665e;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+}
+.card {
+  width: min(580px, 100%);
+  padding: 36px;
+  margin: 14vh auto 0;
+  border: 1px solid #e0e9e4;
+  border-radius: 17px;
+  background: #fff;
+}
+.eyebrow {
+  margin: 0 0 10px !important;
+  color: #4e7165 !important;
+  font-size: 10px !important;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+.card h1 {
+  margin: 0;
+  color: #17271f;
+  font-size: 29px;
+  letter-spacing: -0.05em;
+}
+.card p {
+  margin: 10px 0 0;
+  color: #77847d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.userInfo {
+  display: grid;
+  gap: 4px;
+  padding: 14px 0;
+  margin-top: 20px;
+  border-top: 1px solid #edf1ee;
+  border-bottom: 1px solid #edf1ee;
+  color: #45574d;
+  font-size: 12px;
+}
+.userInfo span {
+  color: #87928c;
+  font-size: 11px;
+}
+.card .placeholder {
+  margin-top: 19px;
+  color: #8b9690;
+  font-size: 11px;
+}

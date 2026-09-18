@@ -12,6 +12,8 @@
     "dev:frontend": "npm run dev -w frontend",
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
+    "test": "dotenv -e .env -- npm run test -w backend",
+    "test:e2e": "dotenv -e .env -- npm run test:e2e -w backend",
     "format": "prettier --write \"backend/src/**/*.ts\" \"backend/test/**/*.ts\" \"backend/prisma/**/*.ts\" \"frontend/src/**/*.{ts,tsx,css}\"",
     "db:up": "docker compose up -d postgres",
     "db:down": "docker compose down",

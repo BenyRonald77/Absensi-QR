@@ -20,6 +20,12 @@
   justify-content: space-between;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .brand {
   justify-content: flex-start;
   gap: 12px;
@@ -47,6 +53,15 @@
   color: #53665e;
   font-size: 12px;
   font-weight: 550;
+}
+
+.loginLink {
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: #174c3e;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .hero {

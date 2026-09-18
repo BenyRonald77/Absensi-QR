@@ -31,7 +31,12 @@ export default function Home() {
             <span className={styles.brandMark}>AT</span>
             <span className={styles.brandName}>Absensi Training</span>
           </Link>
-          <span className={styles.phase}>Fondasi proyek</span>
+          <div className={styles.headerActions}>
+            <span className={styles.phase}>Portal perusahaan</span>
+            <Link className={styles.loginLink} href="/login">
+              Masuk
+            </Link>
+          </div>
         </header>
 
         <section className={styles.hero}>
