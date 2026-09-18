@@ -12,6 +12,7 @@ const navigation = [
   { href: '/admin/training', label: 'Training' },
   { href: '/admin/departemen', label: 'Departemen' },
   { href: '/admin/sesi', label: 'Sesi' },
+  { href: '/admin/compliance', label: 'Compliance' },
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

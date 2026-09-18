@@ -6,6 +6,11 @@ const masterLinks = [
   { href: '/admin/training', title: 'Training', description: 'Kelola program training.' },
   { href: '/admin/departemen', title: 'Departemen', description: 'Kelola struktur departemen.' },
   { href: '/admin/sesi', title: 'Sesi', description: 'Buat dan lihat sesi training.' },
+  {
+    href: '/admin/compliance',
+    title: 'Compliance training',
+    description: 'Pantau pemenuhan jam training tahunan karyawan.',
+  },
 ];
 
 export default function AdminHomePage() {

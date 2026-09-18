@@ -78,3 +78,81 @@
   color: #8b9690;
   font-size: 11px;
 }
+
+.compliance {
+  padding: 18px;
+  margin-top: 20px;
+  border: 1px solid #e2ebe5;
+  border-radius: 13px;
+  background: #fbfdfb;
+}
+
+.complianceHeading,
+.progressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.complianceLabel {
+  color: #85948b;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.compliance h2 {
+  margin: 5px 0 0;
+  color: #20382d;
+  font-size: 15px;
+}
+
+.compliant,
+.notCompliant {
+  padding: 6px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.compliant {
+  background: #e5f3ea;
+  color: #2c704c;
+}
+
+.notCompliant {
+  background: #fff3df;
+  color: #92632a;
+}
+
+.progressTrack {
+  height: 9px;
+  overflow: hidden;
+  margin-top: 19px;
+  border-radius: 999px;
+  background: #eaf0ec;
+}
+
+.progressValue {
+  height: 100%;
+  border-radius: inherit;
+  background: #39805e;
+  transition: width 180ms ease;
+}
+
+.progressMeta {
+  margin-top: 9px;
+  color: #294538;
+  font-size: 11px;
+}
+
+.progressMeta span,
+.sessionCount {
+  color: #87938c;
+}
+
+.card .sessionCount {
+  margin-top: 8px;
+  font-size: 10px;
+}

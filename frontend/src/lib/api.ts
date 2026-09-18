@@ -21,6 +21,18 @@ export interface PageResult<T> {
   meta: { page: number; limit: number; total: number; totalPages: number };
 }
 
+export type ComplianceStatus = 'SUDAH_MEMENUHI' | 'BELUM_MEMENUHI';
+
+export interface ComplianceSummary {
+  employeeId: string;
+  year: number;
+  totalHours: number;
+  targetHours: number;
+  status: ComplianceStatus;
+  progressPercent: number;
+  attendedSessionsCount: number;
+}
+
 const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 const sessionKey = 'absensi-training-session';
 

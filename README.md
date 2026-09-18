@@ -17,6 +17,8 @@ Monorepo untuk aplikasi internal dengan **NestJS + Prisma + PostgreSQL** di `bac
 
 6. Jalankan aplikasi dengan `npm run dev`. Frontend tersedia di `http://localhost:3000` dan API di `http://localhost:3001/api`.
 
+Login melalui `http://localhost:3000/login`. Admin dapat membuka dashboard di `/admin/compliance`; karyawan melihat progres tahunan setelah login di `/karyawan`.
+
 Seed menyiapkan akun demo; semua akun memakai kata sandi `TrainingDemo123!`:
 
 - `admin@example.com` — ADMIN
@@ -30,7 +32,7 @@ Login mengembalikan JWT access token dan menaruh refresh token JWT pada cookie `
 - `POST /api/auth/login`, `POST /api/auth/refresh`, `POST /api/auth/logout`, `GET /api/auth/me`
 - CRUD Admin: `/api/departemen`, `/api/karyawan`, `/api/training`
 - Sesi dasar: `POST /api/sesi` (Admin), `GET /api/sesi` dan `GET /api/sesi/:id` (Admin/Trainer)
-- Compliance dasar: `GET /api/compliance/me?year=2026` (user terautentikasi; default tahun berjalan WIB), `GET` dan `PUT /api/compliance/setting` (Admin)
+- Compliance: `GET /api/compliance/me?year=2026` (user terautentikasi), `GET /api/compliance?year=2026` (dashboard Admin; filter `departemenId` dan `status`), `GET` dan `PUT /api/compliance/setting` (Admin)
 - Semua endpoint list menerima `page` dan `limit`; daftar karyawan juga menerima filter `departemenId`.
 
 Perhitungan compliance menjumlahkan `durasi_jam` dari sesi bertanggal `waktu_buka` pada tahun kalender WIB yang dipilih, hanya jika karyawan memiliki Absensi `HADIR`. Target awal 6 jam disimpan di database dan dapat diubah Admin melalui endpoint pengaturan.

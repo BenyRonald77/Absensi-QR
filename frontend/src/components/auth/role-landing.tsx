@@ -3,7 +3,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { apiRequest, AuthUser, clearSession, UserRole, roleHome } from '../../lib/api';
+import {
+  apiRequest,
+  AuthUser,
+  clearSession,
+  ComplianceSummary,
+  UserRole,
+  roleHome,
+} from '../../lib/api';
 import styles from './role-landing.module.css';
 
 export function RoleLanding({
@@ -17,6 +24,8 @@ export function RoleLanding({
 }) {
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [compliance, setCompliance] = useState<ComplianceSummary | null>(null);
+  const [complianceError, setComplianceError] = useState('');
 
   useEffect(() => {
     apiRequest<AuthUser>('/auth/me')
@@ -32,6 +41,22 @@ export function RoleLanding({
         router.replace('/login');
       });
   }, [role, router]);
+
+  useEffect(() => {
+    if (!user || role !== 'KARYAWAN') return;
+    let current = true;
+    apiRequest<ComplianceSummary>('/compliance/me')
+      .then((summary) => {
+        if (current) setCompliance(summary);
+      })
+      .catch((error: unknown) => {
+        if (current)
+          setComplianceError(error instanceof Error ? error.message : 'Progres belum tersedia.');
+      });
+    return () => {
+      current = false;
+    };
+  }, [role, user]);
 
   async function logout() {
     await apiRequest<void>('/auth/logout', { method: 'POST' }).catch(() => undefined);
@@ -59,9 +84,51 @@ export function RoleLanding({
           <strong>{user.nama}</strong>
           <span>{user.email}</span>
         </div>
-        <p className={styles.placeholder}>
-          Halaman ini akan dilengkapi pada tahap fitur berikutnya.
-        </p>
+        {role === 'KARYAWAN' && (
+          <section aria-label="Progres compliance training" className={styles.compliance}>
+            <div className={styles.complianceHeading}>
+              <div>
+                <span className={styles.complianceLabel}>TAHUN {compliance?.year ?? '—'}</span>
+                <h2>Progres jam training</h2>
+              </div>
+              {compliance && (
+                <span
+                  className={
+                    compliance.status === 'SUDAH_MEMENUHI' ? styles.compliant : styles.notCompliant
+                  }
+                >
+                  {compliance.status === 'SUDAH_MEMENUHI' ? 'Memenuhi' : 'Belum memenuhi'}
+                </span>
+              )}
+            </div>
+            {compliance ? (
+              <>
+                <div className={styles.progressTrack}>
+                  <div
+                    className={styles.progressValue}
+                    style={{ width: `${compliance.progressPercent}%` }}
+                  />
+                </div>
+                <div className={styles.progressMeta}>
+                  <strong>
+                    {compliance.totalHours.toFixed(2)} / {compliance.targetHours.toFixed(2)} jam
+                  </strong>
+                  <span>{compliance.progressPercent}%</span>
+                </div>
+                <p className={styles.sessionCount}>
+                  {compliance.attendedSessionsCount} sesi berstatus hadir
+                </p>
+              </>
+            ) : (
+              <p className={styles.sessionCount}>{complianceError || 'Memuat progres…'}</p>
+            )}
+          </section>
+        )}
+        {role !== 'KARYAWAN' && (
+          <p className={styles.placeholder}>
+            Halaman ini akan dilengkapi pada tahap fitur berikutnya.
+          </p>
+        )}
       </section>
     </main>
   );

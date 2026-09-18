@@ -9,6 +9,7 @@ import {
 function createService() {
   const prisma = {
     complianceSetting: { findUnique: vi.fn(), upsert: vi.fn() },
+    karyawan: { findMany: vi.fn() },
     absensi: { findMany: vi.fn() },
   };
   return {
@@ -101,5 +102,71 @@ describe('ComplianceService', () => {
       select: { targetHours: true, updatedAt: true },
     });
     expect(result.targetHours).toBe(8.5);
+  });
+
+  it('filters the Admin dashboard and computes department totals before pagination', async () => {
+    const { prisma, service } = createService();
+    prisma.complianceSetting.findUnique.mockResolvedValue({
+      targetHours: new Prisma.Decimal('6.00'),
+    });
+    prisma.karyawan.findMany.mockResolvedValue([
+      {
+        id: 'employee-1',
+        nama: 'Ani',
+        email: 'ani@example.com',
+        aktif: true,
+        departemen: { id: 'department-1', nama: 'Operasional' },
+      },
+      {
+        id: 'employee-2',
+        nama: 'Budi',
+        email: 'budi@example.com',
+        aktif: true,
+        departemen: { id: 'department-1', nama: 'Operasional' },
+      },
+    ]);
+    prisma.absensi.findMany.mockResolvedValue([
+      {
+        karyawanId: 'employee-1',
+        sesi: { durasiJam: new Prisma.Decimal('4.00') },
+      },
+      {
+        karyawanId: 'employee-1',
+        sesi: { durasiJam: new Prisma.Decimal('2.00') },
+      },
+      {
+        karyawanId: 'employee-2',
+        sesi: { durasiJam: new Prisma.Decimal('2.25') },
+      },
+    ]);
+
+    const result = await service.getDashboard({
+      year: 2026,
+      departemenId: 'department-1',
+      status: 'BELUM_MEMENUHI',
+      page: 1,
+      limit: 20,
+    });
+
+    expect(prisma.karyawan.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { role: 'KARYAWAN', departemenId: 'department-1' },
+      }),
+    );
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0]).toMatchObject({
+      id: 'employee-2',
+      totalHours: 2.25,
+      status: 'BELUM_MEMENUHI',
+      progressPercent: 37.5,
+    });
+    expect(result.summary).toEqual({
+      year: 2026,
+      targetHours: 6,
+      totalKaryawan: 2,
+      sudahMemenuhi: 1,
+      belumMemenuhi: 1,
+    });
+    expect(result.meta.total).toBe(1);
   });
 });
