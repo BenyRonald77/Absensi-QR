@@ -2,10 +2,8 @@
 
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
-import { AuthSession, roleHome, storeSession } from '../../lib/api';
+import { AuthSession, getApiBaseUrl, roleHome, storeSession } from '../../lib/api';
 import styles from './login.module.css';
-
-const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -18,7 +16,7 @@ export default function LoginPage() {
     setError('');
     setSubmitting(true);
     try {
-      const response = await fetch(`${apiBase}/auth/login`, {
+      const response = await fetch(`${getApiBaseUrl()}/auth/login`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -55,13 +53,14 @@ export default function LoginPage() {
         <h1>Masuk ke akun</h1>
         <p className={styles.description}>Gunakan email dan kata sandi akun perusahaan Anda.</p>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} suppressHydrationWarning>
           <label htmlFor="email">Email</label>
           <input
             autoComplete="username"
             id="email"
             onChange={(event) => setEmail(event.target.value)}
             required
+            suppressHydrationWarning
             type="email"
             value={email}
           />
@@ -72,6 +71,7 @@ export default function LoginPage() {
             id="password"
             onChange={(event) => setPassword(event.target.value)}
             required
+            suppressHydrationWarning
             type="password"
             value={password}
           />

@@ -73,8 +73,19 @@ export interface SessionControlState {
   participants: AssignmentRow[];
 }
 
-const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const configuredApiBase = process.env.NEXT_PUBLIC_API_URL;
 const sessionKey = 'absensi-training-session';
+
+export function getApiBaseUrl() {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+    if (!isLocalhost && (!configuredApiBase || configuredApiBase.includes('localhost'))) {
+      return `${window.location.protocol}//${hostname}:3001/api`;
+    }
+  }
+  return configuredApiBase ?? 'http://localhost:3001/api';
+}
 
 export function getStoredSession(): AuthSession | null {
   if (typeof window === 'undefined') return null;
@@ -97,7 +108,7 @@ export function clearSession() {
 }
 
 async function refreshAccessToken(): Promise<AuthSession | null> {
-  const response = await fetch(`${apiBase}/auth/refresh`, {
+  const response = await fetch(`${getApiBaseUrl()}/auth/refresh`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -116,7 +127,7 @@ async function makeRequest(path: string, init: RequestInit, token?: string) {
   const headers = new Headers(init.headers);
   if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
   if (token) headers.set('Authorization', `Bearer ${token}`);
-  return fetch(`${apiBase}${path}`, { ...init, headers, credentials: 'include' });
+  return fetch(`${getApiBaseUrl()}${path}`, { ...init, headers, credentials: 'include' });
 }
 
 async function readResponse<T>(response: Response): Promise<T> {

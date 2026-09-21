@@ -85,44 +85,66 @@ export function RoleLanding({
           <span>{user.email}</span>
         </div>
         {role === 'KARYAWAN' && (
-          <section aria-label="Progres compliance training" className={styles.compliance}>
-            <div className={styles.complianceHeading}>
+          <>
+            <section aria-label="Cara melakukan absensi" className={styles.scanGuide}>
               <div>
-                <span className={styles.complianceLabel}>TAHUN {compliance?.year ?? '—'}</span>
-                <h2>Progres jam training</h2>
-              </div>
-              {compliance && (
-                <span
-                  className={
-                    compliance.status === 'SUDAH_MEMENUHI' ? styles.compliant : styles.notCompliant
-                  }
-                >
-                  {compliance.status === 'SUDAH_MEMENUHI' ? 'Memenuhi' : 'Belum memenuhi'}
-                </span>
-              )}
-            </div>
-            {compliance ? (
-              <>
-                <div className={styles.progressTrack}>
-                  <div
-                    className={styles.progressValue}
-                    style={{ width: `${compliance.progressPercent}%` }}
-                  />
-                </div>
-                <div className={styles.progressMeta}>
-                  <strong>
-                    {compliance.totalHours.toFixed(2)} / {compliance.targetHours.toFixed(2)} jam
-                  </strong>
-                  <span>{compliance.progressPercent}%</span>
-                </div>
-                <p className={styles.sessionCount}>
-                  {compliance.attendedSessionsCount} sesi berstatus hadir
+                <span className={styles.complianceLabel}>ABSENSI SESI</span>
+                <h2>Scan QR dari Trainer</h2>
+                <p>
+                  QR absensi ditampilkan di layar Trainer saat sesi dibuka. Gunakan kamera HP untuk
+                  memindai QR tersebut, lalu login dan konfirmasi kehadiran.
                 </p>
-              </>
-            ) : (
-              <p className={styles.sessionCount}>{complianceError || 'Memuat progres…'}</p>
-            )}
-          </section>
+              </div>
+              <ol>
+                <li>Buka kamera HP.</li>
+                <li>Arahkan kamera ke QR Trainer.</li>
+                <li>Buka link yang muncul dan tekan konfirmasi.</li>
+              </ol>
+              <Link className={styles.scanButton} href="/karyawan/scan">
+                Buka pemindai QR
+              </Link>
+            </section>
+            <section aria-label="Progres compliance training" className={styles.compliance}>
+              <div className={styles.complianceHeading}>
+                <div>
+                  <span className={styles.complianceLabel}>TAHUN {compliance?.year ?? '—'}</span>
+                  <h2>Progres jam training</h2>
+                </div>
+                {compliance && (
+                  <span
+                    className={
+                      compliance.status === 'SUDAH_MEMENUHI'
+                        ? styles.compliant
+                        : styles.notCompliant
+                    }
+                  >
+                    {compliance.status === 'SUDAH_MEMENUHI' ? 'Memenuhi' : 'Belum memenuhi'}
+                  </span>
+                )}
+              </div>
+              {compliance ? (
+                <>
+                  <div className={styles.progressTrack}>
+                    <div
+                      className={styles.progressValue}
+                      style={{ width: `${compliance.progressPercent}%` }}
+                    />
+                  </div>
+                  <div className={styles.progressMeta}>
+                    <strong>
+                      {compliance.totalHours.toFixed(2)} / {compliance.targetHours.toFixed(2)} jam
+                    </strong>
+                    <span>{compliance.progressPercent}%</span>
+                  </div>
+                  <p className={styles.sessionCount}>
+                    {compliance.attendedSessionsCount} sesi berstatus hadir
+                  </p>
+                </>
+              ) : (
+                <p className={styles.sessionCount}>{complianceError || 'Memuat progres…'}</p>
+              )}
+            </section>
+          </>
         )}
         {role !== 'KARYAWAN' && (
           <p className={styles.placeholder}>

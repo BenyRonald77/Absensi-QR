@@ -17,7 +17,7 @@ Monorepo untuk aplikasi internal dengan **NestJS + Prisma + PostgreSQL** di `bac
 
 6. Jalankan aplikasi dengan `npm run dev`. Frontend tersedia di `http://localhost:3000` dan API di `http://localhost:3001/api`. Docker Compose pada fondasi ini hanya menjalankan PostgreSQL; backend dan frontend berjalan sebagai proses npm agar hot reload tetap sederhana.
 
-Login melalui `http://localhost:3000/login`. Admin dapat membuka dashboard di `/admin/compliance` dan Assignment di `/admin/sesi`; Trainer mengelola QR melalui `/trainer`; karyawan melihat progress tahunan di `/karyawan` atau membuka URL hasil scan `/absen/:token`.
+Login melalui `http://localhost:3000/login`. Admin dapat membuka dashboard di `/admin/compliance` dan Assignment di `/admin/sesi`; Trainer mengelola QR melalui `/trainer`; karyawan melihat progress tahunan di `/karyawan`, memindai QR setelah login melalui `/karyawan/scan`, atau membuka URL hasil scan `/absen/:token`.
 
 Seed menyiapkan akun demo; semua akun memakai kata sandi `TrainingDemo123!`:
 
@@ -45,6 +45,8 @@ Untuk testing scan dari HP di jaringan Wi-Fi yang sama:
 1. Cari alamat IPv4 komputer (contoh `192.168.1.10`).
 2. Di `.env`, ubah `NEXT_PUBLIC_API_URL` menjadi `http://192.168.1.10:3001/api` dan `FRONTEND_URL` menjadi `http://localhost:3000,http://192.168.1.10:3000`.
 3. Jalankan ulang `npm run dev`, lalu buka `http://192.168.1.10:3000` di HP. QR yang tampil akan memakai alamat yang bisa dijangkau HP.
+
+Pemindai kamera di dalam aplikasi memerlukan HTTPS pada browser HP. Pada HTTP lokal, gunakan kamera bawaan HP untuk membuka link QR atau salin link QR ke kolom manual pada `/karyawan/scan`.
 
 ## Perintah utama
 

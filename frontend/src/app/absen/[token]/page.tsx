@@ -160,6 +160,9 @@ export default function AttendancePage() {
               <div className={styles.stateError}>
                 <strong>Anda tidak terdaftar</strong>
                 <p>{status.message}</p>
+                <small className={styles.stateHint}>
+                  Minta Admin menambahkan akun Anda ke peserta sesi sebelum sesi dibuka.
+                </small>
               </div>
             ) : (
               <div className={styles.confirmBox}>
