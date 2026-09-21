@@ -81,6 +81,7 @@ model Sesi {
   trainer     Karyawan     @relation("TrainerSesi", fields: [trainerId], references: [id], onDelete: Restrict)
   assignments Assignment[]
   absensi     Absensi[]
+  qrTokens    QrToken[]
 
   @@index([trainingId])
   @@index([trainerId])
@@ -95,6 +96,7 @@ model Assignment {
   status     StatusAssignment @default(DITUGASKAN)
   karyawan   Karyawan         @relation(fields: [karyawanId], references: [id], onDelete: Restrict)
   sesi       Sesi             @relation(fields: [sesiId], references: [id], onDelete: Restrict)
+  absensi    Absensi?
 
   @@unique([karyawanId, sesiId])
   @@index([sesiId])
@@ -111,11 +113,24 @@ model Absensi {
   status     StatusAbsensi @default(HADIR)
   karyawan   Karyawan      @relation(fields: [karyawanId], references: [id], onDelete: Restrict)
   sesi       Sesi          @relation(fields: [sesiId], references: [id], onDelete: Restrict)
+  assignment Assignment?   @relation(fields: [karyawanId, sesiId], references: [karyawanId, sesiId])
 
   @@unique([karyawanId, sesiId])
   @@index([sesiId])
   @@index([waktuScan])
   @@map("absensi")
+}
+
+model QrToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  sesiId    String   @map("sesi_id") @db.Uuid
+  token     String   @unique @db.VarChar(128)
+  expiredAt DateTime @map("expired_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  sesi      Sesi     @relation(fields: [sesiId], references: [id], onDelete: Cascade)
+
+  @@index([sesiId, expiredAt])
+  @@map("qr_token")
 }
 
 model RefreshToken {

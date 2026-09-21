@@ -33,6 +33,46 @@ export interface ComplianceSummary {
   attendedSessionsCount: number;
 }
 
+export interface SessionRow {
+  id: string;
+  status: 'DRAFT' | 'DIBUKA' | 'DITUTUP';
+  waktuBuka?: string | null;
+  waktuTutup?: string | null;
+  durasiJam?: number | string | null;
+  training: { id: string; nama: string; deskripsi?: string | null };
+  trainer: { id: string; nama: string; email?: string };
+  _count?: { assignments: number; absensi: number };
+}
+
+export interface AssignmentRow {
+  id: string;
+  status: 'DITUGASKAN' | 'SELESAI' | 'DIBATALKAN';
+  karyawan: {
+    id: string;
+    nama: string;
+    email: string;
+    departemen?: { id?: string; nama: string };
+  };
+  absensi: {
+    id: string;
+    status: 'HADIR' | 'ALPHA';
+    waktuScan: string;
+    latitude?: number | string | null;
+    longitude?: number | string | null;
+  } | null;
+}
+
+export interface QrState {
+  token: string;
+  expiredAt: string;
+}
+
+export interface SessionControlState {
+  session: SessionRow;
+  qr: QrState | null;
+  participants: AssignmentRow[];
+}
+
 const apiBase = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 const sessionKey = 'absensi-training-session';
 
@@ -107,6 +147,40 @@ export async function apiRequest<T>(path: string, init: RequestInit = {}): Promi
     if (refreshed) response = await makeRequest(path, init, refreshed.accessToken);
   }
   return readResponse<T>(response);
+}
+
+export async function apiStream<T>(
+  path: string,
+  onMessage: (message: T) => void,
+  signal?: AbortSignal,
+) {
+  const session = getStoredSession();
+  let response = await makeRequest(path, { method: 'GET', signal }, session?.accessToken);
+  if (response.status === 401) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed)
+      response = await makeRequest(path, { method: 'GET', signal }, refreshed.accessToken);
+  }
+  if (!response.ok || !response.body) {
+    await readResponse<unknown>(response);
+    throw new Error('Koneksi live gagal.');
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const events = buffer.split('\n\n');
+    buffer = events.pop() ?? '';
+    for (const event of events) {
+      const line = event.split('\n').find((item) => item.startsWith('data:'));
+      if (!line) continue;
+      onMessage(JSON.parse(line.slice(5).trim()) as T);
+    }
+  }
 }
 
 export function roleHome(role: UserRole) {

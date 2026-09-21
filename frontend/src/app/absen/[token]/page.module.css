@@ -1,0 +1,160 @@
+.page {
+  min-height: 100vh;
+  padding: 24px;
+  background: #f4f7f5;
+}
+.header {
+  width: min(560px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 auto;
+}
+.brand {
+  color: #20332b;
+  font-size: 13px;
+  font-weight: 700;
+}
+.secureLabel {
+  color: #87948c;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.card {
+  width: min(560px, 100%);
+  padding: 34px;
+  margin: 12vh auto 0;
+  border: 1px solid #e0e9e4;
+  border-radius: 17px;
+  background: #fff;
+}
+.loading {
+  display: grid;
+  min-height: 220px;
+  place-items: center;
+  color: #718079;
+  font-size: 13px;
+}
+.eyebrow {
+  margin: 0 0 10px;
+  color: #4e7165;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+.card h1 {
+  margin: 0;
+  color: #17271f;
+  font-size: 29px;
+  letter-spacing: -0.05em;
+}
+.description {
+  margin: 10px 0 22px;
+  color: #77847d;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.sessionMeta {
+  display: grid;
+  gap: 5px;
+  padding: 13px 0;
+  margin-bottom: 22px;
+  border-top: 1px solid #edf1ee;
+  border-bottom: 1px solid #edf1ee;
+}
+.sessionMeta span,
+.sessionMeta small {
+  color: #8b9790;
+  font-size: 10px;
+}
+.sessionMeta strong {
+  color: #3c5245;
+  font-size: 12px;
+}
+.confirmBox,
+.stateSuccess,
+.stateError {
+  padding: 18px;
+  border-radius: 11px;
+}
+.confirmBox {
+  background: #f5faf6;
+}
+.confirmBox p,
+.stateSuccess p,
+.stateError p {
+  margin: 0;
+  color: #607067;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.confirmBox button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 17px;
+  border: 0;
+  border-radius: 9px;
+  background: #174c3e;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+}
+.confirmBox button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.confirmBox small {
+  display: block;
+  margin-top: 12px;
+  color: #859189;
+  font-size: 10px;
+  line-height: 1.45;
+}
+.stateSuccess {
+  background: #eaf6ee;
+  color: #2d6e4a;
+}
+.stateSuccess strong,
+.stateError strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.stateError {
+  background: #fff5ef;
+  color: #985143;
+}
+.stateError p {
+  color: #835e57;
+}
+.secondaryButton {
+  display: inline-block;
+  padding: 9px 11px;
+  margin-top: 16px;
+  border: 1px solid #d9e4dc;
+  border-radius: 8px;
+  color: #345445;
+  font-size: 11px;
+  font-weight: 650;
+}
+.inlineError {
+  margin: 13px 0 0;
+  color: #a33c37;
+  font-size: 11px;
+}
+@media (max-width: 480px) {
+  .page {
+    padding: 14px;
+  }
+  .card {
+    padding: 25px 20px;
+    margin-top: 8vh;
+  }
+  .header {
+    padding: 4px 6px;
+  }
+}

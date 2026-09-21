@@ -132,6 +132,12 @@
   font-size: 9px;
   font-weight: 650;
 }
+.actionLink {
+  color: #286a4e;
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
 .empty {
   height: 70px;
   color: #87928c !important;

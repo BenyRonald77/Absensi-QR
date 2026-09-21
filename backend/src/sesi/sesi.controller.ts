@@ -5,6 +5,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Sse,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -45,5 +46,41 @@ export class SesiController {
     @CurrentUser() actor: AuthenticatedUser,
   ) {
     return this.sesi.findOne(id, actor);
+  }
+
+  @Post(':id/buka')
+  @Roles(Role.ADMIN, Role.TRAINER)
+  open(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.sesi.open(id, actor);
+  }
+
+  @Post(':id/tutup')
+  @Roles(Role.ADMIN, Role.TRAINER)
+  close(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.sesi.close(id, actor);
+  }
+
+  @Get(':id/participants')
+  @Roles(Role.ADMIN, Role.TRAINER)
+  participants(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.sesi.getParticipants(id, actor);
+  }
+
+  @Sse(':id/stream')
+  @Roles(Role.ADMIN, Role.TRAINER)
+  stream(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() actor: AuthenticatedUser,
+  ) {
+    return this.sesi.stream(id, actor);
   }
 }

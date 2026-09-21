@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { apiRequest, PageResult } from '../../../lib/api';
 import styles from './sesi.module.css';
 
@@ -179,12 +180,13 @@ export default function AdminSesiPage() {
                 <th>Trainer</th>
                 <th>Status</th>
                 <th>Peserta ditugaskan</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td className={styles.empty} colSpan={4}>
+                  <td className={styles.empty} colSpan={5}>
                     Memuat data…
                   </td>
                 </tr>
@@ -197,11 +199,16 @@ export default function AdminSesiPage() {
                       <span className={styles.status}>{session.status}</span>
                     </td>
                     <td>{session._count.assignments}</td>
+                    <td>
+                      <Link className={styles.actionLink} href={`/admin/sesi/${session.id}`}>
+                        Kelola peserta
+                      </Link>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td className={styles.empty} colSpan={4}>
+                  <td className={styles.empty} colSpan={5}>
                     Belum ada sesi.
                   </td>
                 </tr>
