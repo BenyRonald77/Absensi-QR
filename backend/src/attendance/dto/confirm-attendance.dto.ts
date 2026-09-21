@@ -3,8 +3,13 @@ import { IsLatitude, IsLongitude, IsNumber, IsOptional } from 'class-validator';
 
 function optionalCoordinate(value: unknown): unknown {
   if (value === null || value === undefined || value === '') return undefined;
-  if (typeof value === 'number') return value;
-  return Number(value);
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? Number(value.toFixed(6)) : undefined;
+  }
+  if (typeof value !== 'string') return undefined;
+
+  const numericValue = Number(value.trim());
+  return Number.isFinite(numericValue) ? Number(numericValue.toFixed(6)) : undefined;
 }
 
 export class ConfirmAttendanceDto {

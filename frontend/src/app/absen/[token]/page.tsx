@@ -85,11 +85,31 @@ export default function AttendancePage() {
     });
   }
 
+  function validLocation(location: { latitude?: number; longitude?: number }) {
+    const { latitude, longitude } = location;
+    if (
+      typeof latitude !== 'number' ||
+      typeof longitude !== 'number' ||
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < -90 ||
+      latitude > 90 ||
+      longitude < -180 ||
+      longitude > 180
+    ) {
+      return {};
+    }
+    return {
+      latitude: Number(latitude.toFixed(6)),
+      longitude: Number(longitude.toFixed(6)),
+    };
+  }
+
   async function confirmAttendance() {
     setSubmitting(true);
     setError('');
     try {
-      const location = await requestLocation();
+      const location = validLocation(await requestLocation());
       await apiRequest(`/absen/${token}/confirm`, {
         method: 'POST',
         body: JSON.stringify(location),
